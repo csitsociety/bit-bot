@@ -1,0 +1,14 @@
+{
+  "name": "bit-bot",
+  "version": "0.0.1",
+  "description": "CSIT Discord bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "RMIT CSIT Society",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.1.1"
+  }
+}
