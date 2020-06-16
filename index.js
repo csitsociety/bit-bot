@@ -1,6 +1,16 @@
+const fs = require('fs');
 const Discord = require('discord.js');
-const client = new Discord.Client();
 const settings = require('./config.json');
+
+const client = new Discord.Client();
+client.commands = new Discord.Collection();
+
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
+}
 
 const emotes = {
 	"csit": "<:csit:679672128966098954>"
@@ -23,6 +33,22 @@ client.on('guildMemberAdd', member => {
 		`\`Beeep boop\`, hiya ${member} and welcome to our server! Please-, share a bit about yourself in <#${introChannel}> so we can get to know you, \`beep\`. ${emotes.csit}`
 	];
 	channel.send(welcomes[Math.floor(Math.random() * welcomes.length)]);
+});
+
+client.on('message', message => {
+	if (message.channel.type !== 'dm' || message.author.bot) return;
+
+	const args = message.content.split(/ +/);
+	const command = args.shift().toLowerCase();
+
+	if (!client.commands.has(command)) return;
+
+	try {
+		client.commands.get(command).execute(client, message, args);
+	} catch (error) {
+		console.error(error);
+		message.reply('Sorry, something went wrong trying to do that. :sob:');
+	}
 });
 
 client.login(settings.token);
