@@ -15,8 +15,6 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
-client.CSIT_ID = '410734250309058560';
-
 const emotes = {
 	"csit": "<:csit:679672128966098954>"
 };
@@ -30,7 +28,7 @@ client.on('guildMemberAdd', member => {
 	const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
 	// Do nothing if the channel wasn't found on this server
 	if (!channel) return;
-	const introChannel = '415417332576288768';
+	const introChannel = settings.intro_channel_id;
 	let welcomes = [
 		`\`Beep boop\`, it is wonderful to see you-, yes, it's great to have you here ${member}! Please, tell us a bit about yourself in <#${introChannel}> \`boop\`? ${emotes.csit}`,
 		`\`Beep boop\`, thank you- for joining our server! I am really glad you're here ${member}, and don't forget to introduce yourself in <#${introChannel}> \`beep\`. ${emotes.csit}`,

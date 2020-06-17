@@ -1,3 +1,5 @@
 {
-	"token": "BOT_TOKEN_HERE"
+	"token": "BOT_TOKEN_HERE",
+	"guild_id": "SERVER_ID",
+	"intro_channel_id": "INTRO_CHANNEL_ID"
 }

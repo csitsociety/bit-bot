@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const emojiRegex = require('emoji-regex');
+const settings = require('../config.json');
 
 const symbols = require('../symbols');
 const functions = require('../functions');
@@ -25,7 +26,7 @@ module.exports = {
 	execute(client, message, args) {
 		let poll_options = {};
 		if (args.length > 0) {
-			let guild = client.guilds.cache.get(client.CSIT_ID);
+			let guild = client.guilds.cache.get(settings.guild_id);
 			let channel = guild.channels.cache.find(ch => ch.name === args.join(' '));
 			if (channel != null) {
 				message.channel.send(`Allow me to assist you with starting a poll in <#${channel.id}> today.\nIf you change your mind and wish to cancel, simply type \`stop\` at any point.`);

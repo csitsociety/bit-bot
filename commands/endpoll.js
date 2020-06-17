@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const settings = require('../config.json');
 
 const functions = require('../functions');
 
@@ -7,7 +8,7 @@ module.exports = {
 	description: 'Close a poll using the poll channel and ID',
 	execute(client, message, args) {
 		if (args.length == 2) {
-			let guild = client.guilds.cache.get(client.CSIT_ID);
+			let guild = client.guilds.cache.get(settings.guild_id);
 			let channel = guild.channels.cache.find(ch => ch.name === args[0]);
 			if (channel != null) {
 				channel.messages.fetch(args[1])
