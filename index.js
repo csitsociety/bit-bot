@@ -15,6 +15,8 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
+client.CSIT_ID = '332158176650854401';
+
 const emotes = {
 	"csit": "<:csit:679672128966098954>"
 };

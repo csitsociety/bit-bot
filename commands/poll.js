@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const emojiRegex = require('emoji-regex');
 
-const CSIT_ID = '332158176650854401';
 const symbols = require('../symbols');
 const functions = require('../functions');
 
@@ -26,7 +25,7 @@ module.exports = {
 	execute(client, message, args) {
 		let poll_options = {};
 		if (args.length > 0) {
-			let guild = client.guilds.cache.get(CSIT_ID);
+			let guild = client.guilds.cache.get(client.CSIT_ID);
 			let channel = guild.channels.cache.find(ch => ch.name === args.join(' '));
 			if (channel != null) {
 				message.channel.send(`Allow me to assist you with starting a poll in <#${channel.id}> today.\nIf you change your mind and wish to cancel, simply type \`stop\` at any point.`);
@@ -129,7 +128,7 @@ module.exports = {
 									});
 								}, Promise.resolve());
 
-								message.channel.send(`I've successfully sent your poll to <#${channel.id}>. If you would like to close the poll, you can send me a dm with the message \`endpoll ${msg.id}\``);
+								message.channel.send(`I've successfully sent your poll to <#${channel.id}>. If you would like to close the poll, you can send me a dm with the message \`endpoll ${args.join(' ')} ${msg.id}\``);
 							});
 							stage = 4;
 							collector.stop();
