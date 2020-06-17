@@ -1,6 +1,6 @@
 {
   "name": "bit-bot",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "CSIT Discord bot",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,9 @@
   "author": "RMIT CSIT Society",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^12.1.1"
+    "@keyv/sqlite": "^2.0.2",
+    "discord.js": "^12.1.1",
+    "emoji-regex": "^9.0.0",
+    "keyv": "^4.0.1"
   }
 }
