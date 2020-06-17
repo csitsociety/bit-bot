@@ -16,23 +16,32 @@ module.exports = {
 							if (all != undefined && all.includes(args[1])) {
 								client.polls.get(args[1]).then(poll => {
 									if (poll != undefined) {
-										let embed = new Discord.MessageEmbed()
-											.setColor('#b22222')
-											.setTitle(`[CLOSED] Poll: ${poll['name']}`)
-											.setFooter(`Poll created by ${poll['creator']['name']}`, poll['creator']['avatar'])
-											.addField('Options', functions.formatOptions(poll['options']))
-											.addField('Results', functions.formatResults(poll['results']));
-										if (poll['description'] != '') {
-											embed.setDescription(poll['description']);
+										if (poll['creator']['name'] === message.author.tag) {
+											let embed = new Discord.MessageEmbed()
+												.setColor('#b22222')
+												.setTitle(`[CLOSED] Poll: ${poll['name']}`)
+												.setFooter(`Poll created by ${poll['creator']['name']}`, poll['creator']['avatar'])
+												.addField('Options', functions.formatOptions(poll['options']))
+												.addField('Results', functions.formatResults(poll['results']));
+											if (poll['description'] != '') {
+												embed.setDescription(poll['description']);
+											}
+											poll_msg.edit(embed);
+											client.polls.delete(args[1]);
+											// Delete entry in all
+											let index = all.indexOf(args[1]);
+											if (index !== -1) all.splice(index, 1);
+											client.polls.set('all', all);
+											message.channel.send(`Ok, I've closed that poll. Any further reactions will be ignored.`);
+										} else {
+											message.channel.send(`Only the user that created that poll can close it.`);
 										}
-										poll_msg.edit(embed);
-										client.polls.delete(args[1]);
+									} else {
+										// Delete entry in all
+										let index = all.indexOf(args[1]);
+										if (index !== -1) all.splice(index, 1);
+										client.polls.set('all', all);
 									}
-									// Delete entry in all
-									let index = all.indexOf(args[1]);
-									if (index !== -1) all.splice(index, 1);
-									client.polls.set('all', all);
-									message.channel.send(`Ok, I've closed that poll. Any further reactions will be ignored.`);
 								});
 							} else {
 								message.channel.send(`I found the poll, but it looks like it's already been closed.`);

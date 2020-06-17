@@ -11,6 +11,13 @@ Run this command in a dm with Bit, and they will go through the name, descriptio
 **Examples:**
 `poll announcements`, `poll club-events`
 
+#### `endpoll [channel name] [poll ID]`
+
+Run this command in a dm with Bit, and they will close the poll specified by the poll ID. Note: The poll ID is given to the user when a poll is created.
+
+**Examples:**
+`endpoll announcements 123456789`
+
 ## Setup
 
 1. Clone repository and run `npm i`
