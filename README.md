@@ -1,4 +1,4 @@
-# Bit
+# Bit <img width="100" align="right" src="https://rawgit.com/csitsociety/bit-bot/master/avatar.png" alt="avatar">
 
 Bit is CSIT's mascot, they help manage the CSIT Discord server.
 
@@ -17,6 +17,20 @@ Run this command in a dm with Bit, and they will close the poll specified by the
 
 **Examples:**
 `endpoll announcements 123456789`
+
+#### `reactionroles [channel name] [message ID]`
+
+Run this command in a dm with Bit, and they will ask some questions to set up reaction roles on the message specified. **Note:** Running `reactionroles` on a previously registered message will overwrite the previous config.
+
+**Examples:**
+`reactionroles rules 123456789`
+
+#### `cancelrr [channel name] [message ID]`
+
+Run this command in a dm with Bit, and they will unregister a message that has previously been set up for reaction roles.
+
+**Examples:**
+`cancelrr rules 123456789`
 
 ## Setup
 

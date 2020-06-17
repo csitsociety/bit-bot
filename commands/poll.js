@@ -25,6 +25,7 @@ function generateResults(options) {
 module.exports = {
 	name: 'poll',
 	description: 'Run a poll in a specified channel using reactions',
+	admin: false,
 	execute(client, message, args) {
 		let poll_options = {};
 		if (args.length > 0) {

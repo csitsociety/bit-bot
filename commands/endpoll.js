@@ -6,6 +6,7 @@ const functions = require('../functions');
 module.exports = {
 	name: 'endpoll',
 	description: 'Close a poll using the poll channel and ID',
+	admin: false,
 	execute(client, message, args) {
 		if (args.length == 2) {
 			let guild = client.guilds.cache.get(settings.guild_id);

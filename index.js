@@ -7,6 +7,7 @@ const functions = require('./functions');
 const client = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 client.commands = new Discord.Collection();
 client.polls = new Keyv('sqlite://polls.sqlite');
+client.rroles = new Keyv('sqlite://rroles.sqlite');
 
 const commandFiles = fs.readdirSync(__dirname + '/commands').filter(file => file.endsWith('.js'));
 
@@ -45,6 +46,17 @@ client.on('message', message => {
 	const command = args.shift().toLowerCase();
 
 	if (!client.commands.has(command)) return;
+
+	// Check role if commands requires admin
+	if (client.commands.get(command).admin) {
+		let guild = client.guilds.cache.get(settings.guild_id);
+		let role = guild.roles.cache.find(r => r.name === settings.admin_role);
+		let member = guild.member(message.author);
+		if (!member.roles.cache.has(role.id)) {
+			message.reply("You don't have permission to run this command.");
+			return;
+		}
+	}
 
 	try {
 		client.commands.get(command).execute(client, message, args);
@@ -90,6 +102,26 @@ async function handleReaction(reaction, user) {
 					}
 				}
 			});
+		}
+	});
+	client.rroles.get(reaction.message.id).then(rr_data => {
+		if (rr_data != undefined) {
+			let valid_reactions = Object.keys(rr_data);
+			if (valid_reactions.includes(reaction.emoji.name)) {
+				// Reaction is assigned to a role
+				let role = reaction.message.guild.roles.cache.find(r => r.name === rr_data[reaction.emoji.name]);
+				if (role != null) {
+					let member = reaction.message.guild.member(user);
+					// Note: fetch() only retrieves 100 users, may need to limit responses if there are more reactions
+					reaction.users.fetch().then(users_reacted => {
+						if (users_reacted.get(user.id) != undefined) {
+							member.roles.add(role);
+						} else {
+							member.roles.remove(role);
+						}
+					});
+				}
+			}
 		}
 	});
 }
