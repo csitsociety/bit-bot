@@ -5,6 +5,7 @@ const settings = require('../config.json');
 const symbols = require('../symbols');
 const functions = require('../functions');
 
+// Create a fake results object for the example embed
 function generateTestResults(options) {
 	op = {...options};
 	for (let i = 0; i < Object.keys(op).length; i++) {
@@ -12,6 +13,7 @@ function generateTestResults(options) {
 	}
 	return op;
 }
+// Create a new results object, with everything initalised to 0
 function generateResults(options) {
 	op = {...options};
 	for (let i = 0; i < Object.keys(op).length; i++) {
@@ -34,7 +36,7 @@ module.exports = {
 				message.channel.send('**Firstly**, what would you like to call the poll? (e.g. "Weekly Trivia Availability")');
 				let stage = 0;
 				options_index = 0;
-				const collector = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 300000 });
+				const collector = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 300000 }); // Timeout after 5 minutes
 
 				collector.on('collect', m => {
 					collector.resetTimer();
@@ -87,29 +89,29 @@ module.exports = {
 								'name': message.author.tag,
 								'avatar': message.author.avatarURL({size: 32})
 							};
-							let exampleEmbed = new Discord.MessageEmbed()
-								.setColor('#b22222')
-								.setTitle(`Poll: ${poll_options['name']}`)
-								.setFooter(`Poll created by ${message.author.tag}`, message.author.avatarURL({size: 32}))
-								.addField('Options (react to vote)', functions.formatOptions(poll_options['options']))
-								.addField('Results', functions.formatResults(generateTestResults(poll_options['options'])));
-							if (poll_options['description'] != '') {
-								exampleEmbed.setDescription(poll_options['description']);
-							}
+							let exampleEmbed = functions.generatePollEmbed({
+								name: poll_options['name'],
+								description: poll_options['description'],
+								author: message.author.tag,
+								avatar: message.author.avatarURL({size: 32}),
+								options: functions.formatOptions(poll_options['options']),
+								results: functions.formatResults(generateTestResults(poll_options['options'])),
+								closed: false,
+							});
 							message.channel.send(exampleEmbed);
 						}
 					} else if (stage == 3) {
 						if (m.content.toLowerCase() === 'ok') {
 							message.channel.startTyping();
-							let embed = new Discord.MessageEmbed()
-								.setColor('#b22222')
-								.setTitle(`Poll: ${poll_options['name']}`)
-								.setFooter(`Poll created by ${message.author.tag}`, message.author.avatarURL({size: 32}))
-								.addField('Options (react to vote)', functions.formatOptions(poll_options['options']))
-								.addField('Results', functions.formatResults(poll_options['results']));
-							if (poll_options['description'] != '') {
-								embed.setDescription(poll_options['description']);
-							}
+							let embed = functions.generatePollEmbed({
+								name: poll_options['name'],
+								description: poll_options['description'],
+								author: message.author.tag,
+								avatar: message.author.avatarURL({size: 32}),
+								options: functions.formatOptions(poll_options['options']),
+								results: functions.formatResults(poll_options['results']),
+								closed: false,
+							});
 							channel.send(embed).then(msg => {
 								client.polls.set(msg.id, poll_options);
 								client.polls.get('all').then(all => {
@@ -129,6 +131,7 @@ module.exports = {
 									});
 								}, Promise.resolve());
 
+								message.channel.stopTyping();
 								message.channel.send(`I've successfully sent your poll to <#${channel.id}>. If you would like to close the poll, you can send me a dm with the message \`endpoll ${args.join(' ')} ${msg.id}\``);
 							});
 							stage = 4;

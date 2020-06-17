@@ -76,15 +76,15 @@ async function handleReaction(reaction, user) {
 						poll['results'][reaction.emoji.name] = total;
 						client.polls.set(reaction.message.id, poll).then(() => {
 							// Update embed
-							let embed = new Discord.MessageEmbed()
-								.setColor('#b22222')
-								.setTitle(`Poll: ${poll['name']}`)
-								.setFooter(`Poll created by ${poll['creator']['name']}`, poll['creator']['avatar'])
-								.addField('Options (react to vote)', functions.formatOptions(poll['options']))
-								.addField('Results', functions.formatResults(poll['results']));
-							if (poll['description'] != '') {
-								embed.setDescription(poll['description']);
-							}
+							let embed = functions.generatePollEmbed({
+								name: poll['name'],
+								description: poll['description'],
+								author: poll['creator']['name'],
+								avatar: poll['creator']['avatar'],
+								options: functions.formatOptions(poll['options']),
+								results: functions.formatResults(poll['results']),
+								closed: false,
+							});
 							reaction.message.edit(embed);
 						});
 					}

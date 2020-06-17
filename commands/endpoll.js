@@ -18,15 +18,15 @@ module.exports = {
 								client.polls.get(args[1]).then(poll => {
 									if (poll != undefined) {
 										if (poll['creator']['name'] === message.author.tag) {
-											let embed = new Discord.MessageEmbed()
-												.setColor('#b22222')
-												.setTitle(`[CLOSED] Poll: ${poll['name']}`)
-												.setFooter(`Poll created by ${poll['creator']['name']}`, poll['creator']['avatar'])
-												.addField('Options', functions.formatOptions(poll['options']))
-												.addField('Results', functions.formatResults(poll['results']));
-											if (poll['description'] != '') {
-												embed.setDescription(poll['description']);
-											}
+											let embed = functions.generatePollEmbed({
+												name: poll['name'],
+												description: poll['description'],
+												author: poll['creator']['name'],
+												avatar: poll['creator']['avatar'],
+												options: functions.formatOptions(poll['options']),
+												results: functions.formatResults(poll['results']),
+												closed: true,
+											});
 											poll_msg.edit(embed);
 											client.polls.delete(args[1]);
 											// Delete entry in all
