@@ -7,6 +7,7 @@ const functions = require('./functions');
 const client = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 client.commands = new Discord.Collection();
 client.polls = new Keyv('sqlite://polls.sqlite');
+client.rroles = new Keyv('sqlite://rroles.sqlite');
 
 const commandFiles = fs.readdirSync(__dirname + '/commands').filter(file => file.endsWith('.js'));
 
