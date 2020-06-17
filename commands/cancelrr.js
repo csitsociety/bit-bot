@@ -3,6 +3,7 @@ const settings = require('../config.json');
 module.exports = {
 	name: 'cancelrr',
 	description: 'Unregister a message from reaction roles',
+	admin: true,
 	execute(client, message, args) {
 		if (args.length == 2) {
 			let guild = client.guilds.cache.get(settings.guild_id);

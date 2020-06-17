@@ -47,6 +47,17 @@ client.on('message', message => {
 
 	if (!client.commands.has(command)) return;
 
+	// Check role if commands requires admin
+	if (client.commands.get(command).admin) {
+		let guild = client.guilds.cache.get(settings.guild_id);
+		let role = guild.roles.cache.find(r => r.name === settings.admin_role);
+		let member = guild.member(message.author);
+		if (!member.roles.cache.has(role.id)) {
+			message.reply("You don't have permission to run this command.");
+			return;
+		}
+	}
+
 	try {
 		client.commands.get(command).execute(client, message, args);
 	} catch (error) {
@@ -101,11 +112,14 @@ async function handleReaction(reaction, user) {
 				let role = reaction.message.guild.roles.cache.find(r => r.name === rr_data[reaction.emoji.name]);
 				if (role != null) {
 					let member = reaction.message.guild.member(user);
-					if (reaction.users.cache.get(user.id) != undefined) {
-						member.roles.add(role);
-					} else {
-						member.roles.remove(role);
-					}
+					// Note: fetch() only retrieves 100 users, may need to limit responses if there are more reactions
+					reaction.users.fetch().then(users_reacted => {
+						if (users_reacted.get(user.id) != undefined) {
+							member.roles.add(role);
+						} else {
+							member.roles.remove(role);
+						}
+					});
 				}
 			}
 		}

@@ -17,6 +17,7 @@ function generateSummary(rr) {
 module.exports = {
 	name: 'reactionroles',
 	description: 'Add roles to users based on reactions to a specific message',
+	admin: true,
 	execute(client, message, args) {
 		let rr_roles = {};
 		if (args.length == 2) {
