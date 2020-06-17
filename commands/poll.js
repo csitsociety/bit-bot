@@ -6,10 +6,18 @@ const symbols = require('../symbols');
 const functions = require('../functions');
 
 function generateTestResults(options) {
-	for (let i = 0; i < Object.keys(options).length; i++) {
-		options[Object.keys(options)[i]] = Math.floor(Math.random() * 100);
+	op = {...options};
+	for (let i = 0; i < Object.keys(op).length; i++) {
+		op[Object.keys(op)[i]] = Math.floor(Math.random() * 100);
 	}
-	return options;
+	return op;
+}
+function generateResults(options) {
+	op = {...options};
+	for (let i = 0; i < Object.keys(op).length; i++) {
+		op[Object.keys(op)[i]] = 0;
+	}
+	return op;
 }
 
 module.exports = {
@@ -74,6 +82,11 @@ module.exports = {
 						if (done) {
 							stage = 3;
 							message.channel.send(`Great, that's everything! Here's an example of what the poll will look like in <#${channel.id}>, if you like it, go ahead and type \`ok\` and I'll post it.`);
+							poll_options['results'] = generateResults(poll_options['options']);
+							poll_options['creator'] = {
+								'name': message.author.tag,
+								'avatar': message.author.avatarURL({size: 32})
+							};
 							let exampleEmbed = new Discord.MessageEmbed()
 								.setColor('#b22222')
 								.setTitle(`Poll: ${poll_options['name']}`)
@@ -83,18 +96,41 @@ module.exports = {
 							if (poll_options['description'] != '') {
 								exampleEmbed.setDescription(poll_options['description']);
 							}
-							let keys = Object.keys(poll_options['options']);
-							message.channel.send(exampleEmbed).then(msg => {
+							message.channel.send(exampleEmbed);
+						}
+					} else if (stage == 3) {
+						if (m.content.toLowerCase() === 'ok') {
+							message.channel.startTyping();
+							let embed = new Discord.MessageEmbed()
+								.setColor('#b22222')
+								.setTitle(`Poll: ${poll_options['name']}`)
+								.setFooter(`Poll created by ${message.author.tag}`, message.author.avatarURL({size: 32}))
+								.addField('Options (react to vote)', functions.formatOptions(poll_options['options']))
+								.addField('Results', functions.formatResults(poll_options['results']));
+							if (poll_options['description'] != '') {
+								embed.setDescription(poll_options['description']);
+							}
+							channel.send(embed).then(msg => {
+								client.polls.set(msg.id, poll_options);
+								client.polls.get('all').then(all => {
+									if (all == undefined) {
+										all = [msg.id];
+									} else {
+										all.push(msg.id);
+									}
+									client.polls.set('all', all);
+								});
+
+								// Reactions
+								let keys = Object.keys(poll_options['options']);
 								keys.reduce((accumulatorPromise, nextKey) => {
 									return accumulatorPromise.then(() => {
 										return msg.react(nextKey);
 									});
-								}, Promise.resolve())
+								}, Promise.resolve());
+
+								message.channel.send(`I've successfully sent your poll to <#${channel.id}>. If you would like to close the poll, you can send me a dm with the message \`endpoll ${msg.id}\``);
 							});
-						}
-					} else if (stage == 3) {
-						if (m.content.toLowerCase() === 'ok') {
-							message.channel.send(`I've successfully sent your poll to <#${channel.id}>. If you would like to close the poll, you can send me a dm with the message \`endpoll ID\``);
 							stage = 4;
 							collector.stop();
 						}
@@ -106,6 +142,8 @@ module.exports = {
 						message.channel.send("It's been 5 minutes, so I've cancelled this. To try again, type `poll " + args.join(' ') + "`.");
 					}
 				});
+			} else {
+				message.channel.send(`I couldn't find a channel called "${args.join(' ')}" in the CSIT Society Discord server.`);
 			}
 		} else {
 			message.channel.send("Usage: `poll [channel name]`");

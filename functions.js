@@ -15,7 +15,10 @@ module.exports = {
 		let total = Object.values(results).reduce((a, b) => a + b);
 		for (let i = 0; i < keys.length; i++) {
 			let count = results[keys[i]];
-			let progress = Math.floor((count/total)*100);
+			let progress = 0;
+			if (total != 0) {
+				progress = Math.floor((count/total)*100);
+			}
 			let progress_bar = '';
 			for (let j = 1; j <= 10; j++) {
 				if (progress >= (j*10)) {

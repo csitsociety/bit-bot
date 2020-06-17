@@ -9,6 +9,7 @@
   "author": "RMIT CSIT Society",
   "license": "MIT",
   "dependencies": {
+    "@keyv/sqlite": "^2.0.2",
     "discord.js": "^12.1.1",
     "emoji-regex": "^9.0.0",
     "keyv": "^4.0.1"

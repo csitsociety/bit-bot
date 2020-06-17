@@ -1,9 +1,12 @@
 const fs = require('fs');
 const Discord = require('discord.js');
+const Keyv = require('keyv');
 const settings = require('./config.json');
+const functions = require('./functions');
 
-const client = new Discord.Client();
+const client = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 client.commands = new Discord.Collection();
+client.polls = new Keyv('sqlite://polls.sqlite');
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
@@ -50,5 +53,48 @@ client.on('message', message => {
 		message.reply('Sorry, something went wrong trying to do that. :sob:');
 	}
 });
+
+async function handleReaction(reaction, user) {
+	// Check if partial and fetch
+	if (reaction.partial) {
+		try {
+			await reaction.fetch();
+		} catch (error) {
+			console.log('Something went wrong when fetching the message: ', error);
+			return;
+		}
+	}
+	client.polls.get('all').then(all => {
+		if (all != undefined && all.includes(reaction.message.id)) {
+			// Is an active poll
+			let total = reaction.count - 1;
+			client.polls.get(reaction.message.id).then(poll => {
+				if (poll != undefined) {
+					let valid_options = Object.keys(poll['options']);
+					if (valid_options.includes(reaction.emoji.name)) {
+						// Reaction is a valid option
+						poll['results'][reaction.emoji.name] = total;
+						client.polls.set(reaction.message.id, poll).then(() => {
+							// Update embed
+							let embed = new Discord.MessageEmbed()
+								.setColor('#b22222')
+								.setTitle(`Poll: ${poll['name']}`)
+								.setFooter(`Poll created by ${poll['creator']['name']}`, poll['creator']['avatar'])
+								.addField('Options (react to vote)', functions.formatOptions(poll['options']))
+								.addField('Results', functions.formatResults(poll['results']));
+							if (poll['description'] != '') {
+								embed.setDescription(poll['description']);
+							}
+							reaction.message.edit(embed);
+						});
+					}
+				}
+			});
+		}
+	});
+}
+
+client.on('messageReactionAdd', handleReaction);
+client.on('messageReactionRemove', handleReaction);
 
 client.login(settings.token);
