@@ -93,6 +93,23 @@ async function handleReaction(reaction, user) {
 			});
 		}
 	});
+	client.rroles.get(reaction.message.id).then(rr_data => {
+		if (rr_data != undefined) {
+			let valid_reactions = Object.keys(rr_data);
+			if (valid_reactions.includes(reaction.emoji.name)) {
+				// Reaction is assigned to a role
+				let role = reaction.message.guild.roles.cache.find(r => r.name === rr_data[reaction.emoji.name]);
+				if (role != null) {
+					let member = reaction.message.guild.member(user);
+					if (reaction.users.cache.get(user.id) != undefined) {
+						member.roles.add(role);
+					} else {
+						member.roles.remove(role);
+					}
+				}
+			}
+		}
+	});
 }
 
 client.on('messageReactionAdd', handleReaction);
