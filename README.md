@@ -20,10 +20,17 @@ Run this command in a dm with Bit, and they will close the poll specified by the
 
 #### `reactionroles [channel name] [message ID]`
 
-Run this command in a dm with Bit, and they will ask some questions to set up reaction roles on the message specified.
+Run this command in a dm with Bit, and they will ask some questions to set up reaction roles on the message specified. **Note:** Running `reactionroles` on a previously registered message will overwrite the previous config.
 
 **Examples:**
 `reactionroles rules 123456789`
+
+#### `cancelrr [channel name] [message ID]`
+
+Run this command in a dm with Bit, and they will unregister a message that has previously been set up for reaction roles.
+
+**Examples:**
+`cancelrr rules 123456789`
 
 ## Setup
 
