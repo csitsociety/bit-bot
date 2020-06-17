@@ -1,4 +1,4 @@
-# Bit <img width="100" align="right" src="https://rawgit.com/csitsociety/bit-bot/master/avatar.png" alt="avatar">
+# Bit <img width="100" align="right" src="https://raw.githack.com/csitsociety/bit-bot/master/avatar.png" alt="avatar">
 
 Bit is CSIT's mascot, they help manage the CSIT Discord server.
 
