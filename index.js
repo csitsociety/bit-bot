@@ -17,7 +17,8 @@ for (const file of commandFiles) {
 }
 
 const emotes = {
-	"csit": "<:csit:679672128966098954>"
+	"csit": "<:csit:679672128966098954>",
+	"bit": "<:bit:724917600718422026>"
 };
 
 client.on('ready', () => {
@@ -31,10 +32,10 @@ async function handleMemberAdd(member) {
 	// Do nothing if the channel wasn't found on this server
 	if (channel) {
 		let serverWelcomes = [
-			`\`Beep boop\`, ${member} is here! ${emotes.csit}`,
-			`\`Beep boop\`, ${member} has arrived ${emotes.csit}`,
-			`\`Beep boop\`, welcome ${member} ${emotes.csit}`,
-			`\`Beeep boop\`, hiya ${member} ${emotes.csit}`
+			`\`Beep boop\`, ${member} is here! ${emotes.bit}`,
+			`\`Beep boop\`, ${member} has arrived ${emotes.bit}`,
+			`\`Beep boop\`, welcome ${member} ${emotes.bit}`,
+			`\`Beeep boop\`, hiya ${member} ${emotes.bit}`
 		];
 		let embed = new Discord.MessageEmbed()
 			.setColor('#b22222')
