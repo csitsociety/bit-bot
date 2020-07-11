@@ -53,9 +53,6 @@ async function handleMemberAdd(member) {
 client.on('guildMemberAdd', handleMemberAdd);
 
 client.on('message', message => {
-	if (message.content.toLowerCase() == 'testjoin') {
-		handleMemberAdd(message.member);
-	}
 	if (message.channel.type !== 'dm' || message.author.bot) return;
 
 	const args = message.content.split(/ +/);
