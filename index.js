@@ -24,22 +24,37 @@ client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('guildMemberAdd', member => {
-	// Send the message to a designated channel on a server:
-	const channel = member.guild.channels.cache.find(ch => ch.name === 'general');
-	// Do nothing if the channel wasn't found on this server
-	if (!channel) return;
+async function handleMemberAdd(member) {
 	const introChannel = settings.intro_channel_id;
-	let welcomes = [
-		`\`Beep boop\`, it is wonderful to see you-, yes, it's great to have you here ${member}! Please, tell us a bit about yourself in <#${introChannel}> \`boop\`? ${emotes.csit}`,
-		`\`Beep boop\`, thank you- for joining our server! I am really glad you're here ${member}, and don't forget to introduce yourself in <#${introChannel}> \`beep\`. ${emotes.csit}`,
-		`\`Beep boop\`, it's me, Bit! I'm your friendly guide here at the CSIT Society ${member}. I'd love to get to know you better-, in <#${introChannel}>? \`boop\`. ${emotes.csit}`,
-		`\`Beeep boop\`, hiya ${member} and welcome to our server! Please-, share a bit about yourself in <#${introChannel}> so we can get to know you, \`beep\`. ${emotes.csit}`
-	];
-	channel.send(welcomes[Math.floor(Math.random() * welcomes.length)]);
-});
+	// Send the message to a designated channel on a server:
+	const channel = member.guild.channels.cache.find(ch => ch.id === introChannel);
+	// Do nothing if the channel wasn't found on this server
+	if (channel) {
+		let serverWelcomes = [
+			`\`Beep boop\`, ${member} is here! ${emotes.csit}`,
+			`\`Beep boop\`, ${member} has arrived ${emotes.csit}`,
+			`\`Beep boop\`, welcome ${member} ${emotes.csit}`,
+			`\`Beeep boop\`, hiya ${member} ${emotes.csit}`
+		];
+		let embed = new Discord.MessageEmbed()
+			.setColor('#b22222')
+			.setDescription(serverWelcomes[Math.floor(Math.random() * serverWelcomes.length)]);
+		channel.send(embed);
+	}
+
+	// Send DM with info
+	let dm = new Discord.MessageEmbed()
+		.setColor('#b22222')
+		.setDescription(`\`Beep boop\`, it's me, Bit! I'm your friendly guide here at the CSIT Society discord server. When you get a chance, I'd love to get to know you better in <#${introChannel}>. 👋\n\n⚠ Before you do anything, please **[check out the rules](https://discordapp.com/channels/410734250309058560/461440685720076318/681418132258291712)** to learn about the server.\n\nDon't forget to have fun! ${emotes.csit}`);
+	member.send(dm);
+}
+
+client.on('guildMemberAdd', handleMemberAdd);
 
 client.on('message', message => {
+	if (message.content.toLowerCase() == 'testjoin') {
+		handleMemberAdd(message.member);
+	}
 	if (message.channel.type !== 'dm' || message.author.bot) return;
 
 	const args = message.content.split(/ +/);
