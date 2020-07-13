@@ -32,10 +32,10 @@ async function handleMemberAdd(member) {
 	// Do nothing if the channel wasn't found on this server
 	if (channel) {
 		let serverWelcomes = [
-			`\`Beep boop\`, ${member} is here! ${emotes.bit}`,
-			`\`Beep boop\`, ${member} has arrived ${emotes.bit}`,
-			`\`Beep boop\`, welcome ${member} ${emotes.bit}`,
-			`\`Beeep boop\`, hiya ${member} ${emotes.bit}`
+			`\`Beep boop\`, ${member.user.tag} is here! ${emotes.bit}`,
+			`\`Beep boop\`, ${member.user.tag} has arrived ${emotes.bit}`,
+			`\`Beep boop\`, welcome ${member.user.tag} ${emotes.bit}`,
+			`\`Beeep boop\`, hiya ${member.user.tag} ${emotes.bit}`
 		];
 		let embed = new Discord.MessageEmbed()
 			.setColor('#b22222')
