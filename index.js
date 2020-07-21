@@ -108,7 +108,7 @@ client.on('message', async message => {
 			// Student number exists
 			if (found) {
 				let guild = client.guilds.cache.get(settings.guild_id);
-				let role = guild.roles.cache.find(r => r.name === settings.verification.role_name);
+				let role = guild.roles.cache.get(settings.verification.role_id);
 				let member = guild.members.cache.get(message.author.id);
 				if (role != null) {
 					member.roles.add(role);

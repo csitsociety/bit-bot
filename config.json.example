@@ -8,6 +8,6 @@
 		"signup_sheet_name": "CSIT_SIGNUP_SHEET_NAME",
 		"verification_sheet_id": "CSIT_DISCORD_VERIFICATION_SHEET_ID",
 		"verification_sheet_name": "CSIT_DISCORD_VERIFICATION_SHEET_NAME",
-		"role_name": "VERIFIED_ROLE_NAME"
+		"role_id": "VERIFIED_ROLE_ID"
 	}
 }
