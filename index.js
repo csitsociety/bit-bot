@@ -91,6 +91,7 @@ client.on('message', async message => {
 		try {
 			const auth = await getAuthToken();
 
+			// Get signup sheet data
 			const signups_response = await getSpreadSheetValues({id: settings.verification.signup_sheet_id, auth, sheetName: settings.verification.signup_sheet_name});
 			let signups = signups_response.data.values.slice(1);
 
@@ -104,6 +105,7 @@ client.on('message', async message => {
 				}
 			}
 
+			// Student number exists
 			if (found) {
 				let guild = client.guilds.cache.get(settings.guild_id);
 				let role = guild.roles.cache.find(r => r.name === settings.verification.role_name);
