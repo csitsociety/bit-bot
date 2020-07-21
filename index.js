@@ -3,11 +3,19 @@ const Discord = require('discord.js');
 const Keyv = require('keyv');
 const settings = require('./config.json');
 const functions = require('./functions');
+const {
+  getAuthToken,
+  getSpreadSheet,
+  getSpreadSheetValues,
+  appendSpreadSheetValue
+} = require('./sheetService');
 
 const client = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
 client.commands = new Discord.Collection();
 client.polls = new Keyv('sqlite://polls.sqlite');
 client.rroles = new Keyv('sqlite://rroles.sqlite');
+
+let studentregex = new RegExp('s[0-9]{7}');
 
 const commandFiles = fs.readdirSync(__dirname + '/commands').filter(file => file.endsWith('.js'));
 
@@ -52,30 +60,88 @@ async function handleMemberAdd(member) {
 
 client.on('guildMemberAdd', handleMemberAdd);
 
-client.on('message', message => {
+client.on('message', async message => {
 	if (message.channel.type !== 'dm' || message.author.bot) return;
 
 	const args = message.content.split(/ +/);
 	const command = args.shift().toLowerCase();
 
-	if (!client.commands.has(command)) return;
-
-	// Check role if commands requires admin
-	if (client.commands.get(command).admin) {
-		let guild = client.guilds.cache.get(settings.guild_id);
-		let role = guild.roles.cache.find(r => r.name === settings.admin_role);
-		let member = guild.member(message.author);
-		if (!member.roles.cache.has(role.id)) {
-			message.reply("You don't have permission to run this command.");
-			return;
+	if (client.commands.has(command)) {
+		// Check role if commands requires admin
+		if (client.commands.get(command).admin) {
+			let guild = client.guilds.cache.get(settings.guild_id);
+			let role = guild.roles.cache.find(r => r.name === settings.admin_role);
+			let member = guild.member(message.author);
+			if (!member.roles.cache.has(role.id)) {
+				message.reply("You don't have permission to run this command.");
+				return;
+			}
 		}
-	}
 
-	try {
-		client.commands.get(command).execute(client, message, args);
-	} catch (error) {
-		console.error(error);
-		message.reply('Sorry, something went wrong trying to do that. :sob:');
+		try {
+			client.commands.get(command).execute(client, message, args);
+		} catch (error) {
+			console.error(error);
+			message.reply('Sorry, something went wrong trying to do that. :sob:');
+		}
+	} else if (studentregex.test(command)) {
+		// Received student number
+		message.channel.startTyping();
+
+		try {
+			const auth = await getAuthToken();
+
+			// Get signup sheet data
+			const signups_response = await getSpreadSheetValues({id: settings.verification.signup_sheet_id, auth, sheetName: settings.verification.signup_sheet_name});
+			let signups = signups_response.data.values.slice(1);
+
+			let found = false;
+			for (let i = 0; i < signups.length; i++) {
+				if (signups[i].length >= 3) {
+					if (signups[i][2].toLowerCase().trim() === command.trim()) {
+						found = true;
+						break;
+					}
+				}
+			}
+
+			// Student number exists
+			if (found) {
+				let guild = client.guilds.cache.get(settings.guild_id);
+				let role = guild.roles.cache.find(r => r.name === settings.verification.role_name);
+				let member = guild.members.cache.get(message.author.id);
+				if (role != null) {
+					member.roles.add(role);
+					message.channel.stopTyping();
+					message.reply("Congrats! :tada: Thanks for verifying on Discord. You should now have the verified role in the CSIT Discord server. If you don't, contact an admin.");
+
+					// Update spreadsheet
+					let row = [
+						`${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+						message.author.tag,
+						command,
+						"Verified"
+					];
+					let verification_response = await appendSpreadSheetValue({id: settings.verification.verification_sheet_id, auth, sheetName: settings.verification.verification_sheet_name, row});
+					if (verification_response.status != 200 || verification_response.data.updates.updatedRows != 1) {
+						message.channel.stopTyping();
+						message.reply("An error occurred while verifying, please contact an executive member and send them this message. [couldn't update sheet]");
+						return;
+					}
+				} else {
+					message.channel.stopTyping();
+					message.reply("You qualify for verification but I couldn't assign you the role. Please contact an executive member for help and send them this message.");
+				}
+			} else {
+				message.channel.stopTyping();
+				message.reply("I've checked, and it looks like you aren't a member of CSIT! Sign up first using the form on our website and try this again.\n<https://csitsociety.club>");
+			}
+		} catch (e) {
+			console.log(e.message, e.stack);
+			message.channel.stopTyping();
+			message.reply("An error occurred while verifying, please contact an executive member and send them this message. [sheets error]");
+		}
+		message.channel.stopTyping();
 	}
 });
 

@@ -1,17 +1,22 @@
 {
-  "name": "bit-bot",
-  "version": "1.0",
-  "description": "CSIT Discord bot",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "RMIT CSIT Society",
-  "license": "MIT",
-  "dependencies": {
-    "@keyv/sqlite": "^2.0.2",
-    "discord.js": "^12.1.1",
-    "emoji-regex": "^9.0.0",
-    "keyv": "^4.0.1"
-  }
+	"name": "bit-bot",
+	"version": "1.1.0",
+	"description": "CSIT Discord bot",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "RMIT CSIT Society",
+	"license": "MIT",
+	"dependencies": {
+		"@keyv/sqlite": "^2.0.2",
+		"discord.js": "^12.1.1",
+		"emoji-regex": "^9.0.0",
+		"googleapis": "^55.0.0",
+		"keyv": "^4.0.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/csitsociety/bit-bot"
+	}
 }

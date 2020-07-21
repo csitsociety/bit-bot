@@ -32,8 +32,16 @@ Run this command in a dm with Bit, and they will unregister a message that has p
 **Examples:**
 `cancelrr rules 123456789`
 
+#### `s[student number]`
+
+Dm Bit your student number, and they will check if you have signed up for CSIT and give you a member role in Dicord.
+
+**Examples:**
+`s1234567`
+
 ## Setup
 
 1. Clone repository and run `npm i`
 2. Rename `config.json.example` to `config.json` and fill out the details
-3. Run `node .` to start the bot
+3. The Google service account credentials must be saved in `service_account_credentials.json` in the root directory
+4. Run `node .` to start the bot
