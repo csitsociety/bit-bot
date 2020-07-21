@@ -7,7 +7,7 @@ const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 async function getAuthToken() {
 	const auth = new google.auth.GoogleAuth({
 		scopes: SCOPES,
-		keyFile: './service_account_credentials.json',
+		keyFile: __dirname + '/service_account_credentials.json',
 		projectId: creds.project_id
 	});
 	const authToken = await auth.getClient();
