@@ -137,7 +137,7 @@ client.on('message', async message => {
 				message.reply("I've checked, and it looks like you aren't a member of CSIT! Sign up first using the form on our website and try this again.\n<https://csitsociety.club>");
 			}
 		} catch (e) {
-			console.log(e.message, e.stack);
+			console.log("Catch error: ", e);
 			message.channel.stopTyping();
 			message.reply("An error occurred while verifying, please contact an executive member and send them this message. [sheets error]");
 		}
