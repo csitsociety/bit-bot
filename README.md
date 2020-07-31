@@ -2,6 +2,10 @@
 
 Bit is CSIT's mascot, they help manage the CSIT Discord server.
 
+- [Commands](#commands)
+- [Other Functions](#other-functions)
+- [Setup](#setup)
+
 ## Commands
 
 #### `poll [channel name]`
@@ -38,6 +42,20 @@ Dm Bit your student number, and they will check if you have signed up for CSIT a
 
 **Examples:**
 `s1234567`
+
+## Other Functions
+
+#### Welcome messages
+
+Bit welcomes new members to the server and also sends a DM to every new user with info about the server. The `intro_channel_id` variable will need to be set in the config file.
+
+#### Auto server icon rotation
+
+**Note: requires 'manage server' permissions**
+
+Bit can automatically cycle between different server icons at certain intervals. To enable, set the `auto_icon` config variable to a cron pattern for when the icon should be changed, and create a folder called `icons` with different icons to use. Bit will select a random icon from that folder. To disable this feature, leave the `auto_icon` config variable empty.
+
+To change the icon every day at midnight, set the `auto_icon` config variable to `0 0 * * *`.
 
 ## Setup
 
