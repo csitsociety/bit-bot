@@ -9,5 +9,6 @@
 		"verification_sheet_id": "CSIT_DISCORD_VERIFICATION_SHEET_ID",
 		"verification_sheet_name": "CSIT_DISCORD_VERIFICATION_SHEET_NAME",
 		"role_id": "VERIFIED_ROLE_ID"
-	}
+	},
+	"auto_icon": "CRON_PATTERN"
 }

@@ -31,6 +31,30 @@ const emotes = {
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
+
+	// Auto icon cron
+	if (settings.auto_icon != '') {
+		fs.access(__dirname + '/icons', function(err) {
+			if (!err) {
+				const icons = fs.readdirSync(__dirname + '/icons').filter(file => file.endsWith('.png') || file.endsWith('.jpg') || file.endsWith('.gif') || file.endsWith('.jpeg'));
+				let CronJob = require('cron').CronJob;
+				let job = new CronJob(
+					settings.auto_icon,
+					function() {
+						if (icons.length > 0) {
+							const icon = icons[Math.floor(Math.random() * icons.length)];
+							let guild = client.guilds.cache.get(settings.guild_id);
+							guild.setIcon(__dirname + '/icons/' + icon, 'Automatic icon change').then(u => console.log('Automatically updated the icon')).catch(console.error);
+						}
+					},
+					null,
+					true,
+				);
+			} else {
+				console.error("Error: Auto icon is enabled but there is no icons directory");
+			}
+		});
+	}
 });
 
 async function handleMemberAdd(member) {
