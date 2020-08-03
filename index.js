@@ -10,7 +10,11 @@ const {
   appendSpreadSheetValue
 } = require('./sheetService');
 
-const client = new Discord.Client({ partials: ['MESSAGE', 'REACTION'] });
+const client = new Discord.Client({
+	partials: ['MESSAGE', 'REACTION'],
+	restRequestTimeout: 120000, // 2 minutes
+	retryLimit: 2,
+});
 client.commands = new Discord.Collection();
 client.polls = new Keyv('sqlite://polls.sqlite');
 client.rroles = new Keyv('sqlite://rroles.sqlite');
