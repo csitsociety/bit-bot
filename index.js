@@ -71,7 +71,9 @@ async function handleMemberAdd(member) {
 			`\`Beep boop\`, ${member.user.tag} is here! ${emotes.bit}`,
 			`\`Beep boop\`, ${member.user.tag} has arrived ${emotes.bit}`,
 			`\`Beep boop\`, welcome ${member.user.tag} ${emotes.bit}`,
-			`\`Beeep boop\`, hiya ${member.user.tag} ${emotes.bit}`
+			`\`Beeep boop\`, hiya ${member.user.tag} ${emotes.bit}`,
+			`\`Booop beep\`, yo ${member.user.tag} ${emotes.bit}`,
+			`\`Boop beeep\`, welcome ${member.user.tag} ${emotes.bit}`
 		];
 		let embed = new Discord.MessageEmbed()
 			.setColor('#b22222')
