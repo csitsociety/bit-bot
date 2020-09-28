@@ -38,7 +38,7 @@ Run this command in a dm with Bit, and they will unregister a message that has p
 
 #### `s[student number]`
 
-Dm Bit your student number, and they will check if you have signed up for CSIT and give you a member role in Dicord.
+Dm Bit your student number, and they will check if you have signed up for CSIT and give you a member role in Discord.
 
 **Examples:**
 `s1234567`
