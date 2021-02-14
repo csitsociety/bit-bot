@@ -36,18 +36,11 @@ Run this command in a dm with Bit, and they will unregister a message that has p
 **Examples:**
 `cancelrr rules 123456789`
 
-#### `s[student number]`
-
-Dm Bit your student number, and they will check if you have signed up for CSIT and give you a member role in Discord.
-
-**Examples:**
-`s1234567`
-
 ## Other Functions
 
 #### Welcome messages
 
-Bit welcomes new members to the server and also sends a DM to every new user with info about the server. The `intro_channel_id` variable will need to be set in the config file.
+Bit sends a log message to a channel when a user joins. The `intro_channel_id` variable will need to be set in the config file.
 
 #### Auto server icon rotation
 
@@ -61,5 +54,4 @@ To change the icon every day at midnight, set the `auto_icon` config variable to
 
 1. Clone repository and run `npm i`
 2. Rename `config.json.example` to `config.json` and fill out the details
-3. The Google service account credentials must be saved in `service_account_credentials.json` in the root directory
-4. Run `node .` to start the bot
+3. Run `node .` to start the bot
