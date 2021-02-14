@@ -3,12 +3,5 @@
 	"guild_id": "SERVER_ID",
 	"intro_channel_id": "INTRO_CHANNEL_ID",
 	"admin_role": "ADMIN_ROLE_NAME",
-	"verification": {
-		"signup_sheet_id": "CSIT_SIGNUP_SHEET_ID",
-		"signup_sheet_name": "CSIT_SIGNUP_SHEET_NAME",
-		"verification_sheet_id": "CSIT_DISCORD_VERIFICATION_SHEET_ID",
-		"verification_sheet_name": "CSIT_DISCORD_VERIFICATION_SHEET_NAME",
-		"role_id": "VERIFIED_ROLE_ID"
-	},
 	"auto_icon": "CRON_PATTERN"
 }
