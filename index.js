@@ -59,7 +59,7 @@ async function handleMemberAdd(member) {
 	const channel = member.guild.channels.cache.find(ch => ch.id === introChannel);
 	// Do nothing if the channel wasn't found on this server
 	if (channel) {
-		channel.send(`\`Member joined: ${member.user}\``);
+		channel.send(`Member joined: ${member.user}`);
 	}
 	console.log(`Member joined: ${member.user.tag}`);
 }
